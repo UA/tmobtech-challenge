@@ -2,25 +2,25 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { map } from 'lodash';
-import { issuesFetch } from '../actions/issuesAction';
+import { searchFetch } from '../actions/searchAction';
 import { Message } from './Message';
 import { Pagination } from './Pagination';
-import { IssuesState } from '../reducers/issuesReducer';
 import { IssueItem } from './IssueItem';
+import { SearchState } from '../reducers/searchReducer';
 
 
 interface StateProps {
-    issuesState: IssuesState;
     name:String;
-    issueCount:Number;
+    searchState: SearchState;
 }
 
 interface DispatchProps {
-    issuesFetch: typeof issuesFetch;
+    searchFetch: typeof searchFetch;
 }
 
 interface State {
     currentPage: Number;
+    type: String;
 }
 
 interface Props extends StateProps, DispatchProps {}
@@ -30,42 +30,44 @@ class IssueList extends React.Component<Props, State> {
     constructor(props:Props){
         super(props);
         this.state ={
-            currentPage: 1
+            currentPage: 1,
+            type: 'issue'
          } 
     }
 
     componentDidMount() {
-        const { name } = this.props
-        this.props.issuesFetch(name, this.state.currentPage);
+        const { name } = this.props;
+        this.props.searchFetch(name, this.state.type, this.state.currentPage);
     }
 
     nextPage = (pageNumber: Number) =>{
-        const { name } = this.props
-        this.props.issuesFetch(name,this.state.currentPage);
+        const { name } = this.props;
+        this.props.searchFetch(name, this.state.type, this.state.currentPage);
         this.setState({currentPage:pageNumber.valueOf()});
     }
 
     render() {
         const {props} = this;
-        const issues = props.issuesState.issues;
-        const totalResult = +props.issueCount;
-        
-        const numberPages = Math.floor(totalResult / 10);
 
-        if (props.issuesState.loading) {
+        const issues = props.searchState.search;
+        const totalResult = issues.total_count;
+        
+        const numberPages = Math.floor(totalResult / 30);
+
+        if (props.searchState.loading) {
             return <Message>⏳ Loading...</Message>;
         }
 
-        if (props.issuesState.error) {
+        if (props.searchState.error) {
             return <Message>😫 Sorry, there's an error during fetching data</Message>;
         }
 
-        if (issues.length) {
+        if (issues.items) {
             return ( 
                 <div>
                     <h2>Issues</h2>
-                    { map(issues, issue => <IssueItem key={issue.id} issue={issue}/>)}
-                    { totalResult > 10 ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
+                    { map(issues.items, issue => <IssueItem key={issue.id} issue={issue} name={props.name}/>)}
+                    { totalResult > 30 ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
                 </div>
                 );
         }
@@ -75,13 +77,12 @@ class IssueList extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: any, ownProps:any) => ({
-    issuesState: state.issues,
+    searchState: state.search,
     name:ownProps.match.params.name,
-    issueCount:ownProps.match.params.issueCount
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    ...bindActionCreators({issuesFetch}, dispatch)
+    ...bindActionCreators({searchFetch}, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssueList);

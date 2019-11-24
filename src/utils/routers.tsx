@@ -14,7 +14,7 @@ class AppRouter extends React.Component {
         <Switch>
           <Route exact path="/" component={RepoList} />
           <Route path="/repoDetail/:name" component={DetailRepo} />
-          <Route path="/issues/:name/:issueCount" component={IssueList}/>
+          <Route path="/issues/:name" component={IssueList}/>
           <Route path="/pulls/:name" component={PullList}/>
         </Switch>
       </BrowserRouter>

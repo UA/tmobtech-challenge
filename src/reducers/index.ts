@@ -5,6 +5,7 @@ import {repo} from './detailReducer';
 import {user} from './userReducer';
 import {issues} from './issuesReducer';
 import {pulls} from './pullsReducer';
+import {search} from './searchReducer';
 
 
 const reducers = combineReducers({
@@ -12,7 +13,8 @@ const reducers = combineReducers({
 	repo,
 	user,
 	issues,
-	pulls
+	pulls,
+	search
 });
 
 export default reducers;

@@ -36,35 +36,38 @@ class DetailRepo extends React.Component<Props, {}> {
             return <Message>😫 Sorry, there's an error during fetching data</Message>;
         }
 
-        return(
-            <div className="repo">
-              <h2>Repository Detail</h2>
-
-            <ul className="collection hoverable">
-             <li className="collection-item avatar grey darken-1 black-text">
-                 <h3 className="title">
-                     <b>{repo.name}</b>
-                 </h3>
-                 <p className="description">
-                     {repo.description}
-                 </p>
-                 <p>
-                 </p>
-                 <p> <b>language:</b> {repo.language} </p>
-                 <p> <b>stargazers_count:</b> {repo.stargazers_count} </p>
-                 <p> <b>forks_count:</b> {repo.forks_count} </p>
-                 <p> <b>open_issues_count:</b> {repo.open_issues_count} </p>
-                 <p> <b>watchers_count:</b> {repo.watchers_count} </p>
-                 
-             </li>
-             <li>
-             <Link className="black-text" to={"/pulls/"+repo.name+"/"+repo.open_issues_count}>Pull Requests</Link> {"  |  "}
-             <Link className="black-text" to={"/issues/"+repo.name+"/"+repo.open_issues_count}>Issues</Link> 
-             </li>
-         </ul>
-         </div>
-        )
-
+        if(repo){
+            return(
+                <div className="repo">
+                  <h2>Repository Detail</h2>
+    
+                <ul className="collection hoverable">
+                 <li className="collection-item avatar grey darken-1 black-text">
+                     <h3 className="title">
+                         <b>{repo.name}</b>
+                     </h3>
+                     <p className="description">
+                         {repo.description}
+                     </p>
+                     <p>
+                     </p>
+                     <p> <b>language:</b> {repo.language} </p>
+                     <p> <b>stargazers_count:</b> {repo.stargazers_count} </p>
+                     <p> <b>forks_count:</b> {repo.forks_count} </p>
+                     <p> <b>open_issues_count:</b> {repo.open_issues_count} </p>
+                     <p> <b>watchers_count:</b> {repo.watchers_count} </p>
+                     
+                 </li>
+                 <li>
+                 <Link className="black-text" to={"/pulls/"+repo.name}>Pull Requests</Link> {"  |  "}
+                 <Link className="black-text" to={"/issues/"+repo.name}>Issues</Link> 
+                 </li>
+             </ul>
+             </div>
+            )
+        }
+       
+        return <Message>😞 Oops, no repo available</Message>;
     }
 }
 
