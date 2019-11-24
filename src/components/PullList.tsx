@@ -2,22 +2,18 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { map } from "lodash";
-import { pullsFetch } from "../actions/pullsAction";
 import { searchFetch } from "../actions/searchAction";
 import { Message } from "./Message";
 import { Pagination } from "./Pagination";
-import { PullsState } from "../reducers/pullsReducer";
 import { SearchState } from "../reducers/searchReducer";
 import { PullItem } from "./PullItem";
 
 interface StateProps {
-  pullsState: PullsState;
   searchState: SearchState;
   name: String;
 }
 
 interface DispatchProps {
-  pullsFetch: typeof pullsFetch;
   searchFetch: typeof searchFetch;
 }
 
@@ -39,15 +35,12 @@ class PullList extends React.Component<Props, State> {
 
   componentDidMount() {
     const { name } = this.props;
-    //this.props.pullsFetch(name, this.state.currentPage);
     this.props.searchFetch(name, this.state.type, this.state.currentPage);
   }
 
   nextPage = (pageNumber: Number) => {
     const { name } = this.props;
-    //this.props.pullsFetch(name,this.state.currentPage);
     this.props.searchFetch(name, this.state.type, this.state.currentPage);
-
     this.setState({ currentPage: pageNumber.valueOf() });
   };
 
@@ -58,15 +51,11 @@ class PullList extends React.Component<Props, State> {
     const totalResult = pulls.total_count;
     const numberPages = Math.floor(totalResult / 30);
 
-    if (props.pullsState.loading) {
+    if (props.searchState.loading) {
       return <Message>⏳ Loading...</Message>;
     }
 
-    if (totalResult == 0) {
-      return <Message>😞 Oops, no pull requests available</Message>;
-    }
-
-    if (props.pullsState.error) {
+    if (props.searchState.error) {
       return <Message>😫 Sorry, there's an error during fetching data</Message>;
     }
 
@@ -89,18 +78,17 @@ class PullList extends React.Component<Props, State> {
         </div>
       );
     }
-    return <Message>⏳ Loading...</Message>;
+    return <Message>😞 Oops, no pull requests available</Message>;
   }
 }
 
 const mapStateToProps = (state: any, ownProps: any) => ({
-  pullsState: state.pulls,
   searchState: state.search,
   name: ownProps.match.params.name
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  ...bindActionCreators({ pullsFetch, searchFetch }, dispatch)
+  ...bindActionCreators({ searchFetch }, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PullList);
