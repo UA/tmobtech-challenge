@@ -5,10 +5,8 @@ import { DetailRepo } from '../models/DetailRepo'
 import { Action } from 'redux';
 
 
-export type Repo = DetailRepo;
-
 export interface DetailAction extends Action {
-    repo: Repo;
+    repo: DetailRepo;
 }
 
 const detailRepoFetchBegin = () => {
@@ -30,17 +28,15 @@ const detailRepoFetchError = () => {
     };
 };
 
-export const detailRepoFetch = (repoName:String) => async (dispatch: any) => {
+export const detailRepoFetch = (repoName:String) => (dispatch: any) => {
 
     dispatch(detailRepoFetchBegin());
-
-    try {
-        const apiUrl = detailApiUrl+repoName;        
-        const response = await axios.get(apiUrl);
-        const repo = response.data;
-        dispatch(detailRepoFetchSuccess(repo));
-    }
-    catch (e) {
-        dispatch(detailRepoFetchError());
-    }
+    const apiUrl = detailApiUrl+repoName;  
+    axios.get(apiUrl)
+			.then(response => {
+				dispatch(detailRepoFetchSuccess(response.data));
+			})
+			.catch(err => {
+                dispatch(detailRepoFetchError());
+			});
 };

@@ -5,11 +5,8 @@ import { Repo } from '../models/Repo'
 import { Action } from 'redux';
 
 
-
-export type RepoList = Repo[];
-
 export interface ReposAction extends Action {
-    repos: RepoList;
+    repos: Repo[];
 }
 
 const reposFetchBegin = () => {
@@ -18,7 +15,7 @@ const reposFetchBegin = () => {
     };
 };
 
-const reposFetchSuccess = (repos: RepoList) => {
+const reposFetchSuccess = (repos: Repo[]) => {
     return {
         type: types.REPOS_FETCH_SUCCESS,
         repos
@@ -31,17 +28,16 @@ const reposFetchError = () => {
     };
 };
 
-export const reposFetch = (currentPage:Number) => async (dispatch: any) => {
-
+export const reposFetch = (currentPage:Number) => (dispatch: any) => {
+    
     dispatch(reposFetchBegin());
-
-    try {
-        const apiUrl = `${reposApiUrl}?per_page=${10}&page=${1}`;        
-        const response = await axios.get(apiUrl);
-        const repos = response.data;
-        dispatch(reposFetchSuccess(repos));
-    }
-    catch (e) {
-        dispatch(reposFetchError());
-    }
+    const apiUrl = `${reposApiUrl}?per_page=${10}&page=${currentPage}`;        
+    axios.get(apiUrl)
+			.then(response => {
+				dispatch(reposFetchSuccess(response.data));
+			})
+			.catch(err => {
+                dispatch(reposFetchError());
+			});
+    
 };

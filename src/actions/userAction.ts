@@ -5,8 +5,6 @@ import { User } from '../models/User'
 import { Action } from 'redux';
 
 
-
-
 export interface UserAction extends Action {
     user: User;
 }
@@ -17,7 +15,7 @@ const userFetchBegin = () => {
     };
 };
 
-const userFetchSuccess = async (user: User) => {
+const userFetchSuccess = (user: User) => {
     return {
         type: types.USER_FETCH_SUCCESS,
         user
@@ -31,16 +29,15 @@ const userFetchError = () => {
 };
 
 
-export const userFetch = () => async (dispatch: any) => {
+export const userFetch = () => (dispatch: any) => {
 
     dispatch(userFetchBegin());
 
-    try {   
-        const response = await axios.get(userApiUrl);
-        const user = response.data;
-        dispatch(userFetchSuccess(user));
-    }
-    catch (e) {
-        dispatch(userFetchError());
-    }
+    axios.get(userApiUrl)
+			.then(response => {
+				dispatch(userFetchSuccess(response.data));
+			})
+			.catch(err => {
+                dispatch(userFetchError());
+			});
 };

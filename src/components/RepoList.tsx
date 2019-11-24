@@ -8,12 +8,13 @@ import { ReposState } from '../reducers/reposReducer';
 import { RepoItem } from './RepoItem';
 import { Message } from './Message';
 import { UserState } from '../reducers/userReducer';
-import Pagination from './Pagination';
+import { Pagination } from './Pagination';
 
 
 interface StateProps {
     reposState: ReposState;
     userState: UserState;
+    
 }
 
 interface DispatchProps {
@@ -23,7 +24,6 @@ interface DispatchProps {
 
 interface State {
     currentPage: Number;
-    totalResult: Number;
 }
 
 interface Props extends StateProps, DispatchProps {}
@@ -33,15 +33,12 @@ class RepoList extends React.Component<Props, State> {
     constructor(props:Props){
         super(props);
         this.state ={
-            currentPage: 1,
-            totalResult: 0
+            currentPage: 1
          } 
     }
 
     componentDidMount() {
-        this.props.userFetch();
-        const repoCount= this.props.userState.user.public_repos;
-        this.setState({totalResult: repoCount})
+        this.props.userFetch();        
         this.props.reposFetch(this.state.currentPage);
     }
 
@@ -53,8 +50,8 @@ class RepoList extends React.Component<Props, State> {
     render() {
         const {props} = this;
         const repos = props.reposState.repos;
-        console.log(this.state.totalResult);
-        //const numberPages = Math.floor(this.state.totalResult.valueOf() / 10);
+        const totalResult = this.props.userState.user.public_repos;
+        const numberPages = Math.floor(this.props.userState.user.public_repos / 10);
 
         if (props.reposState.loading) {
             return <Message>⏳ Loading...</Message>;
@@ -65,10 +62,14 @@ class RepoList extends React.Component<Props, State> {
         }
 
         if (repos.length) {
-            return map(repos, repo => <RepoItem key={repo.id} repo={repo}/>);
+            return ( 
+                <div>
+                    <h2>React Community</h2>
+                    { map(repos, repo => <RepoItem key={repo.id} repo={repo}/>)}
+                    { totalResult > 10 ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
+                </div>
+                );
         }
-
-        // {this.state.totalResult > 10 ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
 
         return <Message>😞 Oops, no repos available</Message>;
     }

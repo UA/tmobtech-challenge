@@ -1,14 +1,18 @@
 import { combineReducers } from 'redux';
 
 import {repos} from './reposReducer';
-import {detailRepo} from './detailReducer';
+import {repo} from './detailReducer';
 import {user} from './userReducer';
+import {issues} from './issuesReducer';
+import {pulls} from './pullsReducer';
 
 
 const reducers = combineReducers({
 	repos,
-	detailRepo,
-	user
+	repo,
+	user,
+	issues,
+	pulls
 });
 
 export default reducers;

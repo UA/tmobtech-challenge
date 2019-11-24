@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 
 interface Props {
     pages: Number;
     currentPage: Number;
-    nextPage(pageNumber:Number):void;
+    nextPage(pageNumber:Number):any;
 }
 
-const Pagination: React.SFC<Props> = props => {
+export const Pagination: React.SFC<Props> = props => {
     const pageLinks= []
 
     for(let i = 1; i <= props.pages.valueOf() + 1 ; i++){
@@ -26,4 +26,3 @@ const Pagination: React.SFC<Props> = props => {
     );
 };
 
-export default Pagination;

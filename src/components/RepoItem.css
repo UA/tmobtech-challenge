@@ -11,3 +11,7 @@
     background-color: #fff246;
     border-radius: 6px;
 }
+
+li{
+    list-style-type: none;
+}

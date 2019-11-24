@@ -1,9 +1,10 @@
-import {  ReposAction, RepoList } from '../actions/reposAction';
+import {  ReposAction } from '../actions/reposAction';
 import { REPOS_FETCH_BEGIN, REPOS_FETCH_ERROR, REPOS_FETCH_SUCCESS } from '../actions/actionTypes';
+import { Repo } from '../models/Repo';
 
 
 export interface ReposState {
-    repos: RepoList;
+    repos: Repo[];
     loading: boolean;
     error: boolean;
 }

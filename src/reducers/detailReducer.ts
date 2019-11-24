@@ -1,13 +1,14 @@
-import {  DetailAction, Repo } from '../actions/detailAction';
+import {  DetailAction } from '../actions/detailAction';
 import { REPO_FETCH_BEGIN, REPO_FETCH_ERROR, REPO_FETCH_SUCCESS } from '../actions/actionTypes';
+import { DetailRepo } from '../models/DetailRepo';
 
 
 export interface DetailRepoState {
-    repo: Repo;
+    repo: DetailRepo;
     loading: boolean;
     error: boolean;
 }
-let detailObject: Repo = {} as any;
+let detailObject: DetailRepo = {} as any;
 const initialState: DetailRepoState = {
     repo: detailObject,
     loading: false,
@@ -15,7 +16,7 @@ const initialState: DetailRepoState = {
 };
 
 
-export const detailRepo = (state = initialState, action: DetailAction): DetailRepoState => {
+export const repo = (state = initialState, action: DetailAction): DetailRepoState => {
     switch (action.type) {
         case REPO_FETCH_BEGIN:
             return {...initialState, loading: true};
