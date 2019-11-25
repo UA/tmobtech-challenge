@@ -34,9 +34,7 @@ export const searchFetch = (repoName:String, type:String, currentPage:Number) =>
     const apiUrl = searchApiUrl+repoName+"+type:"+type+"&page="+currentPage+"&per_page="+ per_page;  
     axios.get(apiUrl)
 			.then(response => {
-                
-                  dispatch(searchFetchSuccess(response.data));
-				
+                  dispatch(searchFetchSuccess(response.data));				
             })
 			.catch(err => {
                 dispatch(searchFetchError());
