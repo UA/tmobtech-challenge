@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as types from './actionTypes';
-import { searchApiUrl } from '../utils/constants'
+import { searchApiUrl, per_page } from '../utils/constants'
 import { Search } from '../models/Search'
 import { Action } from 'redux';
 
@@ -31,7 +31,7 @@ const searchFetchError = () => {
 export const searchFetch = (repoName:String, type:String, currentPage:Number) => (dispatch: any) => {
 
     dispatch(searchFetchBegin());
-    const apiUrl = searchApiUrl+repoName+"+type:"+type+"&page="+currentPage;  
+    const apiUrl = searchApiUrl+repoName+"+type:"+type+"&page="+currentPage+"&per_page="+ per_page;  
     axios.get(apiUrl)
 			.then(response => {
                 

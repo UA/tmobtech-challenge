@@ -9,6 +9,7 @@ import { RepoItem } from './RepoItem';
 import { Message } from './Message';
 import { UserState } from '../reducers/userReducer';
 import { Pagination } from './Pagination';
+import { per_page } from '../utils/constants';
 
 
 interface StateProps {
@@ -51,7 +52,7 @@ class RepoList extends React.Component<Props, State> {
         const {props} = this;
         const repos = props.reposState.repos;
         const totalResult = this.props.userState.user.public_repos;
-        const numberPages = Math.floor(this.props.userState.user.public_repos / 10);
+        const numberPages = Math.floor(this.props.userState.user.public_repos / per_page);
 
         if (props.reposState.loading) {
             return <Message>⏳ Loading...</Message>;
@@ -66,7 +67,7 @@ class RepoList extends React.Component<Props, State> {
                 <div>
                     <h2>React Community</h2>
                     { map(repos, repo => <RepoItem key={repo.id} repo={repo}/>)}
-                    { totalResult > 10 ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
+                    { totalResult > per_page ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
                 </div>
                 );
         }

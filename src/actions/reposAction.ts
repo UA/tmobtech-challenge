@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as types from './actionTypes';
-import { reposApiUrl } from '../utils/constants'
+import { reposApiUrl, per_page } from '../utils/constants'
 import { Repo } from '../models/Repo'
 import { Action } from 'redux';
 
@@ -31,7 +31,7 @@ const reposFetchError = () => {
 export const reposFetch = (currentPage:Number) => (dispatch: any) => {
     
     dispatch(reposFetchBegin());
-    const apiUrl = `${reposApiUrl}?per_page=${10}&page=${currentPage}`;        
+    const apiUrl = `${reposApiUrl}?per_page=${per_page}&page=${currentPage}`;        
     axios.get(apiUrl)
 			.then(response => {
 				dispatch(reposFetchSuccess(response.data));

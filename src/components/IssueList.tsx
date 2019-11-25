@@ -7,6 +7,7 @@ import { Message } from './Message';
 import { Pagination } from './Pagination';
 import { IssueItem } from './IssueItem';
 import { SearchState } from '../reducers/searchReducer';
+import { per_page } from '../utils/constants';
 
 
 interface StateProps {
@@ -52,7 +53,7 @@ class IssueList extends React.Component<Props, State> {
         const issues = props.searchState.search;
         const totalResult = issues.total_count;
         
-        const numberPages = Math.floor(totalResult / 30);
+        const numberPages = Math.floor(totalResult / per_page);
 
         if (props.searchState.loading) {
             return <Message>⏳ Loading...</Message>;
@@ -67,7 +68,7 @@ class IssueList extends React.Component<Props, State> {
                 <div>
                     <h2>Issues</h2>
                     { map(issues.items, issue => <IssueItem key={issue.id} issue={issue} name={props.name}/>)}
-                    { totalResult > 30 ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
+                    { totalResult > per_page ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : ''}
                 </div>
                 );
         }

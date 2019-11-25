@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './RepoItem.css';
-import { Issue } from '../models/Issue';
 import './IssueItem.css';
 import { shorten } from '../utils/stringUtils';
+import { Item } from '../models/Search';
 
 interface Props {
-    issue: Issue;
+    issue: Item;
     name:String;
 }
 

@@ -7,6 +7,7 @@ import { Message } from "./Message";
 import { Pagination } from "./Pagination";
 import { SearchState } from "../reducers/searchReducer";
 import { PullItem } from "./PullItem";
+import { per_page } from "../utils/constants";
 
 interface StateProps {
   searchState: SearchState;
@@ -49,7 +50,7 @@ class PullList extends React.Component<Props, State> {
 
     const pulls = props.searchState.search;
     const totalResult = pulls.total_count;
-    const numberPages = Math.floor(totalResult / 30);
+    const numberPages = Math.floor(totalResult / per_page);
 
     if (props.searchState.loading) {
       return <Message>⏳ Loading...</Message>;
@@ -66,7 +67,7 @@ class PullList extends React.Component<Props, State> {
           {map(pulls.items, pull => (
             <PullItem key={pull.id} pull={pull} name={props.name} />
           ))}
-          {totalResult > 30 ? (
+          {totalResult > per_page ? (
             <Pagination
               pages={numberPages}
               nextPage={this.nextPage}
